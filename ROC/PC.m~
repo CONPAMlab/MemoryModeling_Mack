@@ -1,0 +1,27 @@
+%% Prediction Check
+subj_pred_id = find(FitResults_new{1}.Param(:,end)<= 0.0001);
+param_DPSD_fit = FitResults_new{1}.Param(subj_pred_id,:);
+param_DPSD = [param_DPSD_fit(:,1:(end-1)), ones(length(subj_pred_id),1), param_DPSD_fit(:,end), zeros(length(subj_pred_id),1)];
+%[d-prime, c, sigma, Ro, Rn]
+param_Slot_fit = FitResults_new{2}.Param(subj_pred_id,:);
+param_Slot = [];
+%[d-prime, c, sigma, Ro, Rn]
+Phit_pred = zeros(length(subj_pred_id),5);
+Pfa_pred = zeros(length(subj_pred_id),5);
+for i = 1:length(subj_pred_id)
+    [data_sim, ~]=SimDPSD(param_DPSD(i,:), 5000, 5000, 1, 5);
+    Phit_pred(i,:) = data_sim{1}.Nhit(:,2:end)/5000;
+    Pfa_pred(i,:) = data_sim{1}.Nfa(:,2:end)/5000;
+    Phit_real(i,:) = DataHAHAMerged{subj_pred_id(i)}.Nhit(2:end)/DataHAHAMerged{subj_pred_id(i)}.Nhit(1);
+    Pfa_real(i,:) = DataHAHAMerged{subj_pred_id(i)}.Nfa(2:end)/DataHAHAMerged{subj_pred_id(i)}.Nfa(1);
+end
+
+for i = 1:length(subj_pred_id)
+    plot(Pfa_pred(i,:), Phit_pred(i,:),'-')
+    hold on
+    plot(Pfa_real(i,:), Phit_real(i,:),'o')
+    xlim([0 1])
+    ylim([0 1])
+    pause
+    hold off
+end
