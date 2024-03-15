@@ -113,7 +113,7 @@ switch type
             % Create image
             image([1 Nmodel],1,COI_ModelFreq,'Parent',axes3,'CDataMapping','scaled');
             % Set colormap limits
-            caxis([0,1]);
+            caxis([0,max(max(COI_weight))]);
             % Set the X-limits of the axes
             xlim(axes3,[0.5 Nmodel+.5]);
             % Set the Y-limits of the axes
@@ -133,7 +133,7 @@ switch type
             % Create image
             image([1 Nmodel],1,COI_EP,'Parent',axes4,'CDataMapping','scaled');
             % Set colormap limits
-            caxis([0,1]);
+            caxis([0,max(max(COI_weight))]);
             % Create xlabel
             xlabel('Model');
             % Set the X-limits of the axes

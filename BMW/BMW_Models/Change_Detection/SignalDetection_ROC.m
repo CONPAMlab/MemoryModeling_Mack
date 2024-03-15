@@ -23,7 +23,7 @@ else
     Ro=0;
 end
 if any(strcmp(Input.Variants,'Double Equal Threshold'))
-    Rn=Ro; 
+    Rn=Ro;
 elseif any(strcmp(Input.Variants,'Newness Threshold'))
     Nparam=Nparam+1;
     Rn=param(Nparam); % p(always report new)
@@ -54,8 +54,12 @@ p_fa=zeros(1,Nc);
 for i=1:Nc
     p_hit(i)=Pm*(Ro+(1-Ro)*(1-normcdf(c(i), dp, sigma)))+(1-Pm)*(1-normcdf(c(i), 0, 1)); % hit rate
     p_fa(i)=(1-Rn)*(1-normcdf(c(i), 0, 1)); % false-alarm rate
-    LLH_target=-log(binopdf(Nhit(i), Ntarget, p_hit(i)));
-    LLH_lure=-log(binopdf(Nfa(i), Nlure, p_fa(i)));
+    %     LLH_target=-log(binopdf(Nhit(i), Ntarget, p_hit(i)));
+    %     LLH_lure=-log(binopdf(Nfa(i), Nlure, p_fa(i)));
+        LLH_target = -Nhit(i)*log(p_hit(i)) - (Ntarget - Nhit(i))*log(1-p_hit(i));
+        LLH_lure = -Nfa(i)*log(p_fa(i)) - (Nlure - Nfa(i))*log(1-p_fa(i));
+%     LLH_target = -Nhit(i)/Ntarget*log(p_hit(i));
+%     LLH_lure = -Nfa(i)/Nlure*log(p_fa(i));
     LLH=LLH+LLH_target+LLH_lure; % - log likelihood
 end
 

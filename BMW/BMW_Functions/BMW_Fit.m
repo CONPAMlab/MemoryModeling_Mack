@@ -53,6 +53,7 @@ elseif strcmp(FitOptions.Algorithm,'fmincon: interior-point')
         end
         % FitOptions.fminconOptions.Verbosity=FitOptions.Display;
         FitOptions.fminconOptions.Algorithm='interior-point';
+                FitOptions.fminconOptions = optimoptions(@fmincon,'Algorithm','sqp','MaxIterations',10000,'Display','off');
         eval(['[Param_BMW, LP_BMW, Exitflag, Output]=fmincon(@(Param)',Model,'(Param, Data, Config), Constraints.start,[],[],[],[],Constraints.lb, Constraints.ub, [], FitOptions.fminconOptions);'])
 
 elseif strcmp(FitOptions.Algorithm,'fmincon: active-set')
